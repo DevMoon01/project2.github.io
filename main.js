@@ -4,8 +4,8 @@ document.addEventListener("DOMContentLoaded", function () {
     var videoOne = document.querySelector(".video");
     var videoTwo = document.querySelector(".video-2");
 
-    // Disattiva Lenis su mobile
-    if (window.innerWidth > 768) {
+    // 📌 Disabilita Lenis su mobile per evitare problemi di refresh e scrolling anomalo
+    if (window.innerWidth > 768) { 
         const lenis = new Lenis({
             duration: 1.2
         });
@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", function () {
             lenis.raf(time * 1000);
         });
 
-        // Creazione ScrollTrigger GSAP
+        // 🎯 Creazione ScrollTrigger GSAP
         function scrollTrig() {
             gsap.registerPlugin(ScrollTrigger);
 
@@ -52,13 +52,13 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log("Lenis disabilitato su mobile");
     }
 
-    // Evita il refresh su resize (fix per mobile)
+    // 🚫 Evita il refresh su resize (fix per mobile)
     function onWindowResize() {
         console.log("Window resized, ma senza refresh!");
     }
     window.addEventListener("resize", onWindowResize);
 
-    // Sincronizza i video
+    // 🎬 Sincronizza i video (il secondo video rimane sempre mutato)
     function syncVideos() {
         videoTwo.currentTime = videoOne.currentTime;
     }
@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", function () {
     videoOne.addEventListener("seeked", syncVideos);
     videoOne.addEventListener("timeupdate", syncVideos);
 
-    // Controllo audio + cambio icona
+    // 🔊 Gestione mute/unmute con cambio icona
     button.addEventListener("click", function () {
         if (videoOne.muted) {
             videoOne.muted = false;
@@ -80,6 +80,8 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // Imposta volume di default
-    videoOne.volume = 0.3;
+    // 🔈 Imposta volume di default (senza bloccare il video)
+    videoOne.addEventListener("loadedmetadata", () => {
+        videoOne.volume = 0.2;
+    });
 });
