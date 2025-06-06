@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var videoOne = document.querySelector(".video");
     var videoTwo = document.querySelector(".video-2");
 
-    // 📌 Disabilita Lenis su mobile per evitare problemi di refresh e scrolling anomalo
+    // 📌 Disabilita SOLO il smooth scroll di Lenis su mobile, ma mantiene GSAP ScrollTrigger
     if (window.innerWidth > 768) { 
         const lenis = new Lenis({
             duration: 1.2
@@ -27,30 +27,27 @@ document.addEventListener("DOMContentLoaded", function () {
         gsap.ticker.add((time) => {
             lenis.raf(time * 1000);
         });
-
-        // 🎯 Creazione ScrollTrigger GSAP
-        function scrollTrig() {
-            gsap.registerPlugin(ScrollTrigger);
-
-            let gsapBl = document.querySelector('.gsap__bl').offsetWidth;
-            let gsapTrack = document.querySelector('.gsap__track').offsetWidth;
-            let scrollSliderTransform = gsapTrack - gsapBl;
-
-            gsap.to('.gsap__track', {
-                scrollTrigger: {
-                    trigger: '.gsap_slider',
-                    start: 'center center',
-                    end: () => '+=' + (gsapTrack - 200),
-                    pin: true,
-                    scrub: true
-                },
-                x: '-=' + scrollSliderTransform + 'px'
-            });
-        }
-        scrollTrig();
     } else {
-        console.log("Lenis disabilitato su mobile");
+        console.log("Lenis Smooth Scroll disabilitato su mobile, ma GSAP attivo!");
     }
+
+    // 🎯 Mantieni lo scrolling orizzontale con GSAP ScrollTrigger (anche su mobile)
+    gsap.registerPlugin(ScrollTrigger);
+
+    let gsapBl = document.querySelector('.gsap__bl').offsetWidth;
+    let gsapTrack = document.querySelector('.gsap__track').offsetWidth;
+    let scrollSliderTransform = gsapTrack - gsapBl;
+
+    gsap.to('.gsap__track', {
+        scrollTrigger: {
+            trigger: '.gsap_slider',
+            start: 'center center',
+            end: () => '+=' + (gsapTrack - 200),
+            pin: true,
+            scrub: true
+        },
+        x: '-=' + scrollSliderTransform + 'px'
+    });
 
     // 🚫 Evita il refresh su resize (fix per mobile)
     function onWindowResize() {
@@ -85,3 +82,6 @@ document.addEventListener("DOMContentLoaded", function () {
         videoOne.volume = 0.2;
     });
 });
+
+
+// aggiornato 1
